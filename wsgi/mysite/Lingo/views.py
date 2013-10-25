@@ -1,24 +1,33 @@
 import os.path
 ROOT_PATH = os.path.dirname(__file__)
-
-from Lingo.models import *
 from django.http import HttpResponse
 from django.utils import simplejson
 from django.core import serializers
 from django.template import RequestContext, loader
+from Lingo.models import *
 from django.shortcuts import render_to_response
 from django.contrib.auth.models import User
 from mysite.settings import MEDIA_ROOT
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-
+from datetime import datetime
+import time
+import json
+from django.db.models.fields.files import ImageFieldFile
+from django.utils import simplejson
+from django import shortcuts
+from django.db.models import Q
+from django.db.models import F
+from django.db.models import Count
 
 @login_required
 def index(request):
-    template = loader.get_template('Lingo/index.html')
-    # userProfile = UserProfile.objects.all()
-    context = RequestContext(request,{})
+    template = loader.get_template('Lingo/index2.html')
+    user = User.objects.get(username = request.user)
+    print request.user
+    userProfile = UserProfile.objects.get(user = user)
+    context = RequestContext(request,{'userProfile':userProfile})
     return HttpResponse(template.render(context))
 
 def user_login(request):

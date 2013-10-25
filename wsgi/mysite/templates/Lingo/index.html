@@ -1,5 +1,4 @@
-{% extends 'Lingo/base_bootstrap.html' %}
-{% block content %}
+
 <style type="text/css">
 	body {
 	  padding-top: 20px;
@@ -30,22 +29,25 @@
 		<h1>Lingo</h1>
       </div>
       <hr>
-	    <div class="col-lg-8">
-	      	<div class="media">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" style='width:40px; height:40px;'>
-			  </a>
-			  <div class="media-body">
-			    <h4 class="media-heading">Media heading</h4>
-			    ...
-			  </div>
-			</div>
+	    <div class="col-lg-8" id="chat-content">
+	    	<h3 id='chat-name' style='margin:0px;'></h3>
+	      	<div class='well' style='height:400px;'>
+
+	      	</div>
+	      	<br>
+	      	<textarea class="form-control" rows="3"></textarea>
+	      	<hr>
 	    </div>
 
 	    <div class="col-lg-4 well">
 	    	<ul class="nav nav-pills nav-stacked">
-	    		{% for i in userProfile %}
-					  <li><a href="#">{{i.name}}</a></li>
+	    		{% for i in userProfile.friends.all %}
+					  <li class="selectChat" receiver="{{ i.pk }}" name="{{i.name}}">
+					    <a href="#chat-{{ i.user }}" data-toggle="tab">
+					      <img src="{{MEDIA_URL}}{{i.user.picture}}" height="40px" width="40px">
+					      {{ i.name }}
+					    </a>
+					  </li>
 			  	{% endfor %}
 			</ul>
 	    </div>
@@ -57,12 +59,47 @@
 
 
 <script type="text/javascript">
-	function showMap(toast){
-		Android.showMap()
-	}
-	// showMap();
+	$('.selectChat').click(function(){
+		$('#chat-name').html($(this).attr('name'))
+	    // receiver = $(this).attr('receiver');
+	    // receiver_name = $(this).attr('name')
+	    // img = jQuery("img", this).attr('src');
+
+	    // $('.img-title').attr('src',img);
+	    // $('.name-title').text(receiver);
+	    // $('#msg_notify-'+receiver).html("")
+	    // var element = document.getElementById("chat-"+receiver)
+	    // if (typeof(element) != 'undefined' && element != null) {
+	    //   // update new msg to element
+	    // }
+	    // else{
+
+	    //   var chat = document.createElement("div");
+	    //   chatlist = document.createElement("div")
+	    //   chat.setAttribute("class", "tab-pane fade");
+	    //   chat.setAttribute("id","chat-"+receiver)
+	    //   chatlist.setAttribute("class", "chatlist")
+	    //   chatlist.setAttribute("id","chatlist-"+receiver)
+	    //   chat.appendChild(chatlist)
+	    //   $('#ChatTabContent').append(chat);
+
+	    //   $.get('/restaurant/get_old_message', {'receiver':receiver}, function(data){
+	    //     for (var i=0;i<data.length;i++){
+	          
+	    //       sender_name = data[i].fields.sender;
+	    //       if (sender_name == receiver_name){
+
+	    //           sender_img = $(".img-title").attr('src')
+
+	    //       }
+	    //       else{
+	    //           sender_img = $("#user_img").attr('src');
+	    //       }
+	    //       createChatRow(sender_name, sender_img, data[i].fields.text);
+	    //     }
+	    //   })
+	    // }
+	  })
 </script>
 
-
-{% endblock %}
 
