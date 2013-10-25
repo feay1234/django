@@ -1,0 +1,63 @@
+{% extends 'Lingo/base_bootstrap.html' %}
+{% block content %}
+<style type="text/css">
+	body {
+	  padding-top: 20px;
+	  padding-bottom: 20px;
+	}
+
+
+
+
+	/* Customize container */
+	@media (min-width: 768px) {
+	  .container {
+	    max-width: 730px;
+	  }
+	}
+	
+
+</style>
+	<div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+        <h3 class="text-muted">Lingo</h3>
+      </div>
+      <hr>
+	    <div class="col-lg-8">
+	      	<div class="media">
+			  <a class="pull-left" href="#">
+			    <img class="media-object" style='width:40px; height:40px;'>
+			  </a>
+			  <div class="media-body">
+			    <h4 class="media-heading">Media heading</h4>
+			    ...
+			  </div>
+			</div>
+	    </div>
+
+	    <div class="col-lg-4 well">
+	    	<ul class="nav nav-pills nav-stacked">
+	    		{% for i in userProfile %}
+					  <li><a href="#">{{i.name}}</a></li>
+			  	{% endfor %}
+			</ul>
+	    </div>
+
+      <div class="footer">
+        <p>&copy; Company 2013</p>
+      </div>
+
+    </div>
+
+
+
+<script type="text/javascript">
+</script>
+
+
+{% endblock %}

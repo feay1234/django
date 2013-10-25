@@ -1,0 +1,11 @@
+{% extends 'Lingo/base_bootstrap.html' %}
+
+{% block form %}
+	        <h2 class='text-primary'>Registation</h2>
+	        <FORM id="user_form" enctype="multipart/form-data" method="post" action="/Lingo/register/">
+	                {% csrf_token %}
+	                {{ uform.as_p }}
+	                {{ pform.as_p }}
+                <INPUT class='btn btn-primary btn-lg btn-block'type="submit" name="submit" value="submit" />
+	        </FORM>
+{% endblock %}

@@ -1,0 +1,30 @@
+    
+{% extends 'Lingo/base_bootstrap.html' %}
+
+{% block form %}
+<link href="{{STATIC_URL}}css/login.css" rel="stylesheet">
+  <div class="container">
+
+      <form class="form-signin" id="login_form" method="post" action="/Lingo/login/">
+        {% csrf_token %}
+        <h1 class="text-primary text-center">Lingo</h1>
+        <br>
+        <!-- <input type="text" class="form-control" placeholder="Username" autofocus name="username" value="" id="username" size="50" >
+        <input type="password" class="form-control" placeholder="Password" name="password" value="" id="password" size="50" > -->
+        
+        
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Username" name="username" value="" id="username" size="50" >
+          <input type="password" class="form-control" placeholder="Password" name="password" value="" id="password" size="50" >
+          
+        </div>
+        
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <a class="btn btn-lg btn-danger btn-block" href="/Lingo/register/">Register</a>
+      </form>
+       
+
+  </div>
+
+{% endblock %}
+
