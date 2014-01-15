@@ -42,6 +42,7 @@
 	    <div class="col-lg-4 well">
 	    	<ul class="nav nav-pills nav-stacked">
 	    		{% for i in userProfile.friends.all %}
+	    		df
 					  <li class="selectChat" receiver="{{ i.pk }}" name="{{i.name}}">
 					    <a href="#chat-{{ i.user }}" data-toggle="tab">
 					      <img src="{{MEDIA_URL}}{{i.user.picture}}" height="40px" width="40px">

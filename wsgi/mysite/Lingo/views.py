@@ -23,7 +23,7 @@ from django.db.models import Count
 
 @login_required
 def index(request):
-    template = loader.get_template('Lingo/index2.html')
+    template = loader.get_template('lingue/profile.html')
     user = User.objects.get(username = request.user)
     print request.user
     userProfile = UserProfile.objects.get(user = user)
