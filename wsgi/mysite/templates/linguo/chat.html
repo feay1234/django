@@ -1,76 +1,26 @@
 {% extends 'linguo/base.html' %}
 {% block content %}
 <style type="text/css">
-	html, body
-	{
-	}
-	#Content
-	{
-	    height: 100%;
-	}
-	#chatArea{
-		position: fixed;
-		top: 50px;
-		bottom: 50px;
-	    overflow-y: auto;
-	}
-	#textInput{
-		bottom: 0;
-		position: fixed;
 
-	}
-	html, body {
-    height: 100%;
-}
-body {
-    margin:0;
-}
-#header {
-    background:#333;
-    height: 50px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
 #content {
     position: absolute;
-    top: 50px;
-    left: 0;
+    top: 90px;
     right: 0;
-    bottom: 45px;
-    overflow-y: scroll;
+    bottom: 0;
+    overflow-y: hidden;
+    max-width: 900px;
 }
 #messages {
     overflow: auto;
+    max-height:80%;
 }
-#messages .message {
-    height: 79px;
-    background: #999;
-    border-bottom: 1px solid #000;
-}
-#input {
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height: 45px;
-}
-#input .spacer {
-    padding: 5px;
-}
-#input input {
-    width: 100%;
-    height: 33px;
-    font-size: 20px;
-    line-height: 33px;
-    border: 1px solid #333;
-    text-indent: 5px;
-    color: #222;
-    margin: 0;
-    padding: 0;
-}
+
+
+
+
 </style>
-	<!-- <div class="list-group col-md-3">
+<div style="">
+	<div class="list-group col-md-3 col-sm-12 col-xs-12" style="margin-top:90px;">
   		<a href="#" class="list-group-item active">
 	  		<span class="badge">14</span>
 			Cras justo odio
@@ -87,10 +37,23 @@ body {
 		  	<span class="badge">14</span>
 			Cras justo odio
 	  	</a>
+	  	<a href="#" class="list-group-item">
+		  	<span class="badge">14</span>
+			Cras justo odio
+	  	</a>
+	  	<a href="#" class="list-group-item">
+		  	<span class="badge">14</span>
+			Cras justo odio
+	  	</a>
+	  	<a href="#" class="list-group-item">
+		  	<span class="badge">14</span>
+			Cras justo odio
+	  	</a>
+
 	</div>
 
-	<div class="col-md-9">
-		<div id="chatArea" style="height:90%">
+	<div id="content" class="col-md-9" >
+		<div id="messages" class="thumbnail">
 		  	<div class="media thumbnail">
 			  <a class="pull-left" href="#">
 			    <img class="media-object" src="http://www.ericyu.ca/blog/wp-content/uploads/2013/04/Faces-2004.jpg" style="height:50px; width:50px;">
@@ -146,38 +109,13 @@ body {
 				</div>
 			</div>
 		</div>	
+		<br>
 		<div id="textInput">
-			<input id="textInput" type="text" class="form-control" placeholder="Text input">
-			<button class="button">askdf</button>
+			<textarea class="form-control" rows="3"></textarea>
 		</div>
+
 		
-	</div> -->
-
-
-<div id="Content2" class="row">
-	<div id="container">
-		    <div id="header">The header...</div>
-		    <div id="content">
-		        <div id="messages">
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		            <div class="message">example</div>
-		        </div>
-		        <div id="input">
-		            <div class="spacer">
-		                <input type="text" />
-		            </div>
-		        </div>
-		    </div>
-		</div>
-	
+	</div>
 </div>
 
 {% endblock %}
