@@ -46,11 +46,13 @@ def user_login(request):
           username = request.POST['username']
           password = request.POST['password']
           user = authenticate(username=username, password=password)
+          print "dfd"
           if user is not None:
               if user.is_active:
                   login(request, user)
+
                   # Redirect to index page.
-                  return HttpResponseRedirect("/Linguo/")
+                  return HttpResponseRedirect("/linguo/")
                   # return render_to_response('restaurant/feed.html', {}, context)
 
 		 # return render_to_response('restaurant/index.html', {}, context)
@@ -60,16 +62,16 @@ def user_login(request):
           else:
               # Return an 'invalid login' error message.
               print  "invalid login details " + username + " " + password
-              return render_to_response('Linguo/login.html', {}, context)
+              return render_to_response('linguo/login.html', {}, context)
     else:
         # the login is a  GET request, so just show the user the login form.
-        return render_to_response('Linguo/login.html', {}, context)
+        return render_to_response('linguo/login.html', {}, context)
 
 @login_required
 def user_logout(request):
     context = RequestContext(request)
     logout(request)
-    return HttpResponseRedirect('/Linguo/')
+    return HttpResponseRedirect('/linguo/')
 
 def register(request):
     context = RequestContext(request)
@@ -86,11 +88,11 @@ def register(request):
             profile.save()
 
             
-            return HttpResponseRedirect('/Linguo/')
+            return HttpResponseRedirect('/linguo/')
         else:
-            return render_to_response('Linguo/register.html', {'uform': uform,'pform':pform}, context)          
+            return render_to_response('linguo/register.html', {'uform': uform,'pform':pform}, context)          
     else:
         uform = UserForm()
         pform = UserProfileForm()
-        return render_to_response('Linguo/register.html', {'uform': uform,'pform':pform}, context)
+        return render_to_response('linguo/register.html', {'uform': uform,'pform':pform}, context)
 

@@ -159,4 +159,4 @@ LOGGING = {
         },
     }
 }
-LOGIN_URL = '/Lingo/login'
+LOGIN_URL = '/linguo/login'
