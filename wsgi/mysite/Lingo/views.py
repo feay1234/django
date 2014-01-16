@@ -23,7 +23,7 @@ from django.db.models import Count
 
 @login_required
 def index(request):
-    template = loader.get_template('lingue/profile.html')
+    template = loader.get_template('linguo/index.html')
     user = User.objects.get(username = request.user)
     print request.user
     userProfile = UserProfile.objects.get(user = user)
@@ -31,7 +31,12 @@ def index(request):
     return HttpResponse(template.render(context))
 
 def chat_list(request):
-    template = loader.get_template('lingue/chat_list.html')
+    template = loader.get_template('linguo/chat_list.html')
+    context = RequestContext(request,{})
+    return HttpResponse(template.render(context))
+
+def chat(request):
+    template = loader.get_template('linguo/chat.html')
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
 
@@ -45,7 +50,7 @@ def user_login(request):
               if user.is_active:
                   login(request, user)
                   # Redirect to index page.
-                  return HttpResponseRedirect("/Lingo/")
+                  return HttpResponseRedirect("/Linguo/")
                   # return render_to_response('restaurant/feed.html', {}, context)
 
 		 # return render_to_response('restaurant/index.html', {}, context)
@@ -55,16 +60,16 @@ def user_login(request):
           else:
               # Return an 'invalid login' error message.
               print  "invalid login details " + username + " " + password
-              return render_to_response('Lingo/login.html', {}, context)
+              return render_to_response('Linguo/login.html', {}, context)
     else:
         # the login is a  GET request, so just show the user the login form.
-        return render_to_response('Lingo/login.html', {}, context)
+        return render_to_response('Linguo/login.html', {}, context)
 
 @login_required
 def user_logout(request):
     context = RequestContext(request)
     logout(request)
-    return HttpResponseRedirect('/Lingo/')
+    return HttpResponseRedirect('/Linguo/')
 
 def register(request):
     context = RequestContext(request)
@@ -81,11 +86,11 @@ def register(request):
             profile.save()
 
             
-            return HttpResponseRedirect('/Lingo/')
+            return HttpResponseRedirect('/Linguo/')
         else:
-            return render_to_response('Lingo/register.html', {'uform': uform,'pform':pform}, context)          
+            return render_to_response('Linguo/register.html', {'uform': uform,'pform':pform}, context)          
     else:
         uform = UserForm()
         pform = UserProfileForm()
-        return render_to_response('Lingo/register.html', {'uform': uform,'pform':pform}, context)
+        return render_to_response('Linguo/register.html', {'uform': uform,'pform':pform}, context)
 
