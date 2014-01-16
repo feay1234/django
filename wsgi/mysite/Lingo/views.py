@@ -30,6 +30,11 @@ def index(request):
     context = RequestContext(request,{'userProfile':userProfile})
     return HttpResponse(template.render(context))
 
+def chat_list(request):
+    template = loader.get_template('lingue/chat_list.html')
+    context = RequestContext(request,{})
+    return HttpResponse(template.render(context))
+
 def user_login(request):
     context = RequestContext(request)
     if request.method == 'POST':

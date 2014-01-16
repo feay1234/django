@@ -1,6 +1,15 @@
 {% extends 'lingue/base.html' %}
 {% block content %}
     <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <form role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button href="/Lingo/chat_list/" type="submit" class="btn btn-default">Submit</button>
+        </form>
+      </div>
+      
       <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
           <img src="http://rockyourcareer.files.wordpress.com/2012/11/george_blomgren_med-pic.jpg" style='height:200px;' alt="...">
@@ -34,39 +43,42 @@
                   </ul>
               </dd> 
             </dl>
-            <p><a href="edit_profile.html" class='btn btn-danger pull-right'>Edit Profile</a></p>
-            <p><a href="search.html" class='btn btn-primary pull-left'>Search</a></p>
+            <p><a href="/Lingo/chat_list/" class='btn btn-danger pull-right'>Edit Profile</a></p>
             <br>
-            <h3>Favorite Languists</h3>
-            <hr>
-            <div class="row">
-              <div class="col-xs-4 col-sm-4">
-                <img src="http://peterhurley.com/news/wp-content/uploads/2012/03/cali_0002web-375x300.jpg" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-              <div class="col-xs-4 col-sm-4">
-                <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRuzh-P6JqtMz0QR1eMHsbJNRsAD7Zbhrr3rfB0JM2c0jzatpZ4ywfavmzK" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-              <div class="col-xs-4 col-sm-4">
-                <img src="http://techon.nikkeibp.co.jp/english/NEWS_EN/20090602/171114/thumb_230_MP_1.jpg" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-              <div class="col-xs-4 col-sm-4">
-                <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQhCYBzHzkCJ-M8tYC-y1TvLiBrhPW5_JmQW4hvX-CxhE8wem2J" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-              <div class="col-xs-4 col-sm-4">
-                <img src="http://1.bp.blogspot.com/-4SOnMzYi5xo/T6lr_2osj1I/AAAAAAAAA6E/VdA_1JXXHeI/s1600/liam+1.jpg" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-              <div class="col-xs-4 col-sm-4">
-                <img src="http://web-images.chacha.com/images/facts-about-the-human-face1392523141-jun-26-2012-600x360.jpg" class="img-circle" style='width:80px; height:90px;'>
-                <h4 class="text-center" ><a href="other_profile.html">name</a></h4>
-              </div>
-            <a href="friend.html" class='pull-right'>view all</a>
-            </div>
+            
 
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-md-8">
+        <div class = "thumbnail">
+          <ul class="list-inline">
+            <li><h3>Favorite Languists</h3></li>
+            <li><a href="#" class="btn btn-primary btn-xs" role="button" >See More</a></li>
+          </ul>
+            
+          <div class="row">
+              <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                  <img src="http://web-images.chacha.com/images/facts-about-the-human-face1392523141-jun-26-2012-600x360.jpg">
+                  <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>...</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-6 col-md-3">
+                <div class="thumbnail">
+                  <img src="http://web-images.chacha.com/images/facts-about-the-human-face1392523141-jun-26-2012-600x360.jpg">
+                  <div class="caption">
+                    <h3>Thumbnail label</h3>
+                    <p>...</p>
+                    <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+                  </div>
+                </div>
+              </div>
+            <a href="friend.html" >view all</a>
           </div>
         </div>
       </div>
