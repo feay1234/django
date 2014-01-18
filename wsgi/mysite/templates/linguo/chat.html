@@ -15,7 +15,9 @@
     max-height:80%;
 }
 
-
+span {
+    display: none;
+  }
 
 
 </style>
@@ -49,7 +51,8 @@
 		  	<span class="badge">14</span>
 			Cras justo odio
 	  	</a>
-
+	  	<p><input type="text"> <span>focus fire</span></p>
+<p><input type="password"> <span>focus fire</span></p>
 	</div>
 
 	<div id="content" class="col-md-9" >
@@ -117,5 +120,18 @@
 		
 	</div>
 </div>
+
+<script type="text/javascript">
+var objDiv = document.getElementById("messages");
+objDiv.scrollTop = objDiv.scrollHeight;
+
+$( "textarea" ).focus(function() {
+	var objDiv = document.getElementById("messages");
+	messages.scrollTop = objDiv.scrollHeight;
+});
+$( "input" ).focus(function() {
+  $( this ).next( "span" ).css( "display", "inline" ).fadeOut( 1000 );
+});
+</script>
 
 {% endblock %}
