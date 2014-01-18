@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^chat/$', views.chat, name='chat'),
     url(r'^chat_list/$', views.chat_list, name='chat_list'),
     url(r'^register/$', views.register, name='register'),
+    url(r'^chat2/$', views.chat2, name='chat2'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.user_logout, name='logout'),
 

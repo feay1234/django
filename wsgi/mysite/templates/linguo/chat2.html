@@ -1,0 +1,78 @@
+{% extends 'linguo/base.html' %}
+{% block content %}
+<style type="text/css">
+html, body {
+    height: 100%;
+}
+body {
+    margin:0;
+}
+#header {
+    background:#333;
+    height: 50px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+#content {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    bottom: 45px;
+    overflow-y: scroll;
+}
+#messages {
+    overflow: auto;
+}
+#messages .message {
+    height: 79px;
+    background: #999;
+    border-bottom: 1px solid #000;
+}
+#input {
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    height: 45px;
+}
+#input .spacer {
+    padding: 5px;
+}
+#input input {
+    width: 100%;
+    height: 33px;
+    font-size: 20px;
+    line-height: 33px;
+    border: 1px solid #333;
+    text-indent: 5px;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+</style>
+
+<div id="container">
+    <div id="header">The header...</div>
+    <div id="content">
+        <div id="messages">
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+            <div class="message">example</div>
+        </div>
+        <div id="input">
+            <div class="spacer">
+                <input type="text" />
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
