@@ -9,9 +9,9 @@
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
     <link href="{{STATIC_URL}}bootstrap-3.0.0/dist/css/bootstrap.css" rel="stylesheet">
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="{{ STATIC_URL}}js/jquery-1.10.2.min.js"></script>
     <script src="{{ STATIC_URL}}bootstrap-3.0.0/dist/js/bootstrap.min.js"></script>
-    
+    <script src="{{ STATIC_URL}}js/typeahead.min.js"></script>
   </head>
 
   <body>
@@ -30,12 +30,13 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/linguo/">Home</a></li>
+            <li class=""><a href="/linguo/profile">Search Result</a>
             <li><a href="/linguo/chat2">Chat2</a></li>
             <li><a href="/linguo/logout">Logout</a></li>
             <li>
               <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Search">
+                  <input type="text" class="form-control typeahead" placeholder="Search">
                 </div>
               </form>
             </li>
@@ -48,6 +49,7 @@
     <div class="container" >
         {% if user.is_authenticated %}
           {% block content %}
+
           {% endblock %}
         {% else %}
           
@@ -58,7 +60,7 @@
     </div> 
 
 
-
+    
     
 
   </body>

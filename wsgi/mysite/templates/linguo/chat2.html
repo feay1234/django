@@ -1,78 +1,252 @@
 {% extends 'linguo/base.html' %}
 {% block content %}
 <style type="text/css">
-html, body {
-    height: 100%;
+/*
+ * Style tweaks
+ * --------------------------------------------------
+ */
+html,
+body {
+  overflow-x: hidden; /* Prevent scroll on narrow devices */
 }
 body {
-    margin:0;
+  padding-top: 70px;
 }
-#header {
-    background:#333;
-    height: 50px;
-    position: fixed;
-    top: 0;
-    width: 100%;
+footer {
+  padding: 30px 0;
 }
-#content {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    right: 0;
-    bottom: 45px;
-    overflow-y: scroll;
-}
-#messages {
-    overflow: auto;
-}
-#messages .message {
-    height: 79px;
-    background: #999;
-    border-bottom: 1px solid #000;
-}
-#input {
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
-    height: 45px;
-}
-#input .spacer {
-    padding: 5px;
-}
-#input input {
-    width: 100%;
-    height: 33px;
-    font-size: 20px;
-    line-height: 33px;
-    border: 1px solid #333;
-    text-indent: 5px;
-    color: #222;
-    margin: 0;
-    padding: 0;
-}
-</style>
 
-<div id="container">
-    <div id="header">The header...</div>
-    <div id="content">
-        <div id="messages">
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-            <div class="message">example</div>
-        </div>
-        <div id="input">
-            <div class="spacer">
-                <input type="text" />
-            </div>
-        </div>
-    </div>
+/*
+ * Off Canvas
+ * --------------------------------------------------
+ */
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all 0.25s ease-out;
+    -moz-transition: all 0.25s ease-out;
+    transition: all 0.25s ease-out;
+  }
+
+  .row-offcanvas-right
+  .sidebar-offcanvas {
+    right: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left
+  .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+  }
+
+  .row-offcanvas-right.active {
+    right: 50%; /* 6 columns */
+  }
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+}
+
+/* typeahead */
+/* custom font! */
+/* ------------ */
+
+@font-face {
+  font-family: Prociono;
+  src: url(../font/Prociono-Regular-webfont.ttf);
+}
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 300px;
+  height: 30px;
+  padding: 8px 12px;
+  font-size: 18px;
+  line-height: 30px;
+  outline: none;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 300px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.tt-suggestion.tt-is-under-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+</style>
+<div style="padding-top:20px;">
+
+	<div class="container">
+
+      <div class="row row-offcanvas row-offcanvas-right">
+
+      	<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+          <div class="list-group">
+            <a href="#" class="list-group-item active">
+		  		<span class="badge">14</span>
+				link
+		  	</a>
+		  	<a href="#" class="list-group-item">
+			  	<span class="badge">14</span>
+				link
+		  	</a>
+		  	<a href="#" class="list-group-item">
+			  	<span class="badge">14</span>
+				link
+		  	</a>
+          </div>
+        </div><!--/span-->
+
+
+        <div class="col-xs-12 col-sm-9">
+          
+          <p class="pull-right visible-xs">
+            <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+          </p>
+		  	<div id="chat_content" style="margin-top:0; height:350px; overflow-y:auto; 	">
+		  		<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+				<div class="media thumbnail">
+				  <a class="pull-left" href="#">
+				    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+				  </a>
+				  	<div class="media-body">
+					    <h4 class="media-heading">Me</h4>
+					    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+					</div>
+				</div>
+		  	</div>
+		  	<br>
+		  	<textarea class="form-control" rows="3"></textarea>
+		  </div>
+		  	
+        </div><!--/row-->
+      </div><!--/span-->
+
+        
+      </div><!--/row-->
+
+      
+
+    </div>	
+		
+	
+
 </div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('[data-toggle=offcanvas]').click(function() {
+    $('.row-offcanvas').toggleClass('active');
+  });
+});
+$('.typeahead').typeahead({
+    name: 'countries',
+    local: ['timtrueman', 'JakeHarding', 'vskarich'],
+    limit: 10
+  });
+</script>
+
 {% endblock %}

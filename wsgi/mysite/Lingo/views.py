@@ -35,6 +35,11 @@ def chat_list(request):
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
 
+def profile(request):
+    template = loader.get_template('linguo/friend.html')
+    context = RequestContext(request,{})
+    return HttpResponse(template.render(context))
+
 def chat(request):
     template = loader.get_template('linguo/chat.html')
     context = RequestContext(request,{})
@@ -44,6 +49,12 @@ def chat2(request):
     template = loader.get_template('linguo/chat2.html')
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
+
+def get_chat(request):
+  response_data = {}
+  response_data['result'] = 'failed'
+  response_data['message'] = 'You messed up'
+  return HttpResponse(json.dumps(response_data), content_type="application/json")
 
 def user_login(request):
     context = RequestContext(request)
