@@ -25,9 +25,9 @@ from django.db.models import Count
 def index(request):
     template = loader.get_template('linguo/index.html')
     user = User.objects.get(username = request.user)
-    print request.user
     userProfile = UserProfile.objects.get(user = user)
-    context = RequestContext(request,{'userProfile':userProfile})
+    another_user = UserProfile.objects.exclude(user = user)
+    context = RequestContext(request,{'userProfile':userProfile, 'another_user':another_user})
     return HttpResponse(template.render(context))
 
 def chat_list(request):
@@ -35,9 +35,47 @@ def chat_list(request):
     context = RequestContext(request,{})
     return HttpResponse(template.render(context))
 
+def add_friend(request):
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    FriendInvitation(sender = sender, receiver = receiver).save()
+    return HttpResponse("yes")
+
+def delete_friendInvitation(request):
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    invitation = FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
+    return HttpResponse("delete already")
+
+def delete_friend(request):
+    friend = request.GET['receiver']
+
+    return HttpResponse("yes")
+
+def accept_friend(request):
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.GET['sender']))     
+    friendInvitation = FriendInvitation.objects.filter(sender = sender, receiver = receiver)
+    friendInvitation.update(approve = True)
+    
+    return HttpResponse("yes")
+
+def send_message(request):
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    Message(sender = sender, receiver = receiver, text = request.GET['text']).save()
+    return HttpResponse("yes")  
+
+@login_required
 def profile(request):
     template = loader.get_template('linguo/friend.html')
-    context = RequestContext(request,{})
+
+    user = User.objects.get(username = request.user)
+    userProfile = UserProfile.objects.get(user = user)
+    another_user = UserProfile.objects.exclude(user = user)
+    invitation = FriendInvitation.objects.filter(Q(sender=userProfile) | Q(receiver=userProfile))
+    
+    context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
     return HttpResponse(template.render(context))
 
 def chat(request):

@@ -5,7 +5,7 @@
     <div class="thumbnail">
       <img src="{{ STATIC_URL}}test.jpg" style='height:200px;' alt="...">
       <div class="caption">
-        <h3>Feay</h3>
+        <h3>{{userProfile.name}}</h3>
         <dl>
           <dt>Location</dt>
           <dd>Glasgow</dd>
@@ -38,6 +38,7 @@
   </div>
   <div class="col-xs-6 col-sm-6 col-md-9" >
     <h3>My Favorite Linguists</h3>
+
     <table class="table table-hover">
       <tr>
       <th>Picture</th>
@@ -46,34 +47,37 @@
       <th>Interests</th>
       <th>Action</th>
       </tr>
-      <tr>
-        <td>
-          <img class="media-object" src="{{ STATIC_URL}}women.png" style="height:40px; width:40px;">
-        </td>
-        <td>
-          asdfasd fasdfsdf
-        </td>
-        <td>
-            <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
-            </ul>
-        </td> 
-        <td>
-            <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
-            </ul>
-        </td>
-        <td>
-          <a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a>
-        </td>
-      </tr>
+      {% for i in another_user %}
+          
+          <tr>
+            <td>
+              <img class="media-object" src="{{ STATIC_URL}}women.png" style="height:40px; width:40px;">
+            </td>
+            <td>
+              {{i.name}}
+            </td>
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-primary">English</span></li>
+                  <li><span class="label label-primary">German</span></li>
+                  <li><span class="label label-primary">Chinese</span></li>
+                </ul>
+            </td> 
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-success">Football</span></li>
+                  <li><span class="label label-success">Rock Music</span></li>
+                  <li><span class="label label-success">Movie</span></li>
+                  <li><span class="label label-success">Reading</span></li>
+                  <li><span class="label label-success">Party</span></li>
+                  <li><span class="label label-success">Cooking</span></li>
+                </ul>
+            </td>
+            <td>
+              <a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a>
+            </td>
+          </tr>
+      {% endfor %}
       
     </table>
       <!-- <div class="col-md-6">
@@ -176,4 +180,5 @@
     <!-- </div> -->
   </div>
 </div>
+
 {% endblock %}

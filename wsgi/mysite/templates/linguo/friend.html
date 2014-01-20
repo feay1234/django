@@ -1,42 +1,84 @@
 {% extends 'linguo/base.html' %}
+{% load custom_template %}
 {% block content %}
-  <div class="container" style='padding-top:90px;'>
-        <div class="col-xs-3 col-sm-3">
-          <div class="thumbnail">
-      <img src="http://rockyourcareer.files.wordpress.com/2012/11/george_blomgren_med-pic.jpg" alt="...">
-      <div class="caption">
-        <h3>Feay</h3>
-        <dl>
-          <dt>Location</dt>
-          <dd>Glasgow</dd>
-          <dt>Langauges <small><a href="">view all</a></small></dt>
-          <dd>
-            <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
-            </ul>
-          </dd> 
-          <dt>Interests <small><a href="">view all</a></small></dt>
-          <dd>
-            <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
-            </ul>
-          </dd> 
-        </dl>
-        <br>
-        <p><a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a></p>
-        <p><a href="#" class="btn btn-default btn-block" role="button">Add Linguist</a></p>
+<div class="container" style='padding-top:90px; max-width:900px;'>
+    {{invitation}}
+    <table class="table table-hover">
+      <tr>
+      <th>Picture</th>
+      <th>Name</th>
+      <th>Languages</th>
+      <th>Interests</th>
+      <th>Action</th>
+      </tr>
+      {% for i in another_user %}
+          
+          <tr>
+            <td>
+              <img class="media-object" src="{{ STATIC_URL}}women.png" style="height:40px; width:40px;">
+            </td>
+            <td>
+              {{i.name}}
+            </td>
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-primary">English</span></li>
+                  <li><span class="label label-primary">German</span></li>
+                  <li><span class="label label-primary">Chinese</span></li>
+                </ul>
+            </td> 
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-success">Football</span></li>
+                  <li><span class="label label-success">Rock Music</span></li>
+                  <li><span class="label label-success">Movie</span></li>
+                  <li><span class="label label-success">Reading</span></li>
+                  <li><span class="label label-success">Party</span></li>
+                  <li><span class="label label-success">Cooking</span></li>
+                </ul>
+            </td>
+            <td>
+              {% if i|check_request:invitation %}
+                <a class="addBtn btn btn-danger btn-block" name="{{i.name}}">Request</a>
+              {% else %}
+                <a class="addBtn btn btn-primary btn-block" name="{{i.name}}">Add</a>
+              {% endif %}
+            </td>
+          </tr>
+      {% endfor %}
+      
+    </table>    
+</div>
 
-      </div>
-    </div>
-        </div>
-    </div>
+<script type="text/javascript">
+
+$( ".addBtn" ).click(function() {
+  var $t = $(this);
+  var receiver = $t.attr('name');
+  if( $t.text() == "Add"){
+    
+    $.get('/linguo/add_friend',{'receiver':receiver}, function(data){
+
+      alert(data);
+      $t.attr('class', 'addBtn btn btn-danger btn-block');
+      $t.text('Request');
+    })
+  }
+  else{
+    
+    $.get('/linguo/delete_friendInvitation',{'receiver':receiver}, function(data){
+
+      alert(data);
+      $t.attr('class', 'addBtn btn btn-primary btn-block');
+      $t.text('Add');
+
+    })
+    
+  }
+  
+});
+
+</script>
 {% endblock %}
 
      
