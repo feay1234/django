@@ -14,11 +14,17 @@ GENDER = (
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField(max_length=32)
+    photo = models.CharField(max_length=32)
     gender = models.CharField(max_length=1, choices=GENDER)
+    city = models.CharField(max_length=64) 
+    country = models.CharField(max_length=64)
+    longitude = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
     datetime = models.DateTimeField(default=datetime.now, editable=False)
     friends = models.ManyToManyField("self", related_name="friends")
     def __unicode__(self):
             return self.user.username
+
 class Message(models.Model):
 	sender = models.ForeignKey(UserProfile,related_name='senderM')
 	receiver = models.ForeignKey(UserProfile, related_name='receiverM')
@@ -27,6 +33,23 @@ class Message(models.Model):
 	read = models.BooleanField(default=False)
 	notify = models.BooleanField(default=False)
 	def __unicode__(self):
+            return self.sender.user.username
+
+class Language(models.Model):
+	user = models.ForeignKey(UserProfile,related_name='userL')
+	language = models.CharField(max_length=64)
+
+class Favorite(models.Model):
+	user = models.ForeignKey(UserProfile,related_name='userF')
+	favorite = models.CharField(max_length=128)
+
+class FriendInvitation(models.Model):
+    sender = models.ForeignKey(UserProfile,related_name='senderFI')
+    receiver = models.ForeignKey(UserProfile, related_name='receiverFI')
+    approve = models.BooleanField(default=False)
+    datetime = models.DateTimeField(default=datetime.now, editable=False)
+    notification = models.BooleanField(default=False)
+    def __unicode__(self):
             return self.sender.user.username
 
 class UserForm(forms.ModelForm):
