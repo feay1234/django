@@ -31,12 +31,57 @@
         </dl>
         <br>
         <p><a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a></p>
-        <p><a href="#" class="btn btn-default btn-block" role="button">Add Linguist</a></p>
+        <p><a href="#" class="btn btn-default btn-block" role="button" >Add Linguist</a></p>
 
       </div>
     </div>
   </div>
   <div class="col-xs-6 col-sm-6 col-md-9" >
+    {% if invitation %}
+
+    <div id="requestAlarm" class="alert alert-info"><strong>Friend Requests! </strong> accept the request and start chatting.</div>
+    <h3 id="requestText">New Requests</h3>
+    <table id="requestTable" class="table table-hover">
+      <tr>
+      <th>Picture</th>
+      <th>Name</th>
+      <th>Languages</th>
+      <th>Interests</th>
+      <th>Action</th>
+      </tr>
+      {% for i in invitation %}
+          <tr>
+            <td>
+              <img class="media-object" src="{{ STATIC_URL}}women.png" style="height:40px; width:40px;">
+            </td>
+            <td>
+              {{i.sender.name}}
+            </td>
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-primary">English</span></li>
+                  <li><span class="label label-primary">German</span></li>
+                  <li><span class="label label-primary">Chinese</span></li>
+                </ul>
+            </td> 
+            <td>
+                <ul class="list-inline">
+                  <li><span class="label label-success">Football</span></li>
+                  <li><span class="label label-success">Rock Music</span></li>
+                  <li><span class="label label-success">Movie</span></li>
+                  <li><span class="label label-success">Reading</span></li>
+                  <li><span class="label label-success">Party</span></li>
+                  <li><span class="label label-success">Cooking</span></li>
+                </ul>
+            </td>
+            <td>
+              <a href="#" class="acceptBtn btn btn-primary btn-block" name="{{i.sender.name}}">Accept</a>
+            </td>
+          </tr>
+      {% endfor %}
+    </table>
+    <br>
+    {% endif%}
     <h3>My Favorite Linguists</h3>
 
     <table class="table table-hover">
@@ -47,7 +92,7 @@
       <th>Interests</th>
       <th>Action</th>
       </tr>
-      {% for i in another_user %}
+      {% for i in userProfile.friends.all %}
           
           <tr>
             <td>
@@ -80,105 +125,29 @@
       {% endfor %}
       
     </table>
-      <!-- <div class="col-md-6">
-        <div class="media thumbnail">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:70px; width:70px;">
-          </a>
-          <div class="media-body">
-            <h3 class="media-heading">Jarana Manotumruksa</h3>
-            <strong>Languages</strong>
-            <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
-            </ul>
-            <strong>Interests</strong>
-            <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
-            </ul>
-            <br>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Chat</button>
-          </div>
-
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="media thumbnail">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:70px; width:70px;">
-          </a>
-          <div class="media-body">
-            <h3 class="media-heading">Jarana Manotumruksa</h3>
-            <strong>Languages</strong>
-            <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
-            </ul>
-            <strong>Interests</strong>
-            <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
-            </ul>
-            <br>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Chat</button>
-          </div>
-
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="media thumbnail">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:70px; width:70px;">
-          </a>
-          <div class="media-body">
-            <h3 class="media-heading">Jarana Manotumruksa</h3>
-            
-            <button type="button" class="btn btn-primary btn-lg btn-block">Chat</button>
-          </div>
-
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="media thumbnail">
-          <a class="pull-left" href="#">
-            <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:70px; width:70px;">
-          </a>
-          <div class="media-body">
-            <h3 class="media-heading">Jarana Manotumruksa</h3>
-            <strong>Languages</strong>
-            <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
-            </ul>
-            <strong>Interests</strong>
-            <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
-            </ul>
-            <br>
-            <button type="button" class="btn btn-primary btn-lg btn-block">Chat</button>
-          </div>
-
-        </div>
-      </div> -->
-    <!-- </div> -->
+      
   </div>
 </div>
+<script type="text/javascript">
 
+$( ".acceptBtn" ).click(function() {
+  var $t = $(this);
+  var sender = $t.attr('name');
+    
+  $.get('/linguo/accept_request',{'sender':sender}, function(data){
+      alert(data);
+      $t.parent().parent().remove();
+      var rowCount = $('#requestTable tr').length;
+      if(rowCount == 1){
+        $('#requestTable').remove();
+        $('#requestText').remove();
+        $('#requestAlarm').remove();
+      }
+      // automatically add new linguist to friend list
+      
+  })
+  
+});
+
+</script>
 {% endblock %}

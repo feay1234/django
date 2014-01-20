@@ -2,7 +2,6 @@
 {% load custom_template %}
 {% block content %}
 <div class="container" style='padding-top:90px; max-width:900px;'>
-    {{invitation}}
     <table class="table table-hover">
       <tr>
       <th>Picture</th>
@@ -65,7 +64,7 @@ $( ".addBtn" ).click(function() {
     })
   }
   else{
-    
+
     $.get('/linguo/delete_friendInvitation',{'receiver':receiver}, function(data){
 
       alert(data);

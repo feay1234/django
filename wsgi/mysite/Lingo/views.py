@@ -27,7 +27,10 @@ def index(request):
     user = User.objects.get(username = request.user)
     userProfile = UserProfile.objects.get(user = user)
     another_user = UserProfile.objects.exclude(user = user)
-    context = RequestContext(request,{'userProfile':userProfile, 'another_user':another_user})
+    invitation = FriendInvitation.objects.filter(receiver = userProfile)
+
+    context = RequestContext(request,{'userProfile':userProfile, 'another_user':another_user, 'invitation':invitation})
+
     return HttpResponse(template.render(context))
 
 def chat_list(request):
@@ -41,10 +44,17 @@ def add_friend(request):
     FriendInvitation(sender = sender, receiver = receiver).save()
     return HttpResponse("yes")
 
+def accept_request(request):
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.GET['sender']))
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    receiver.friends.add(sender)
+    FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
+    return HttpResponse("accept_friend")
+
 def delete_friendInvitation(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
     receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
-    invitation = FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
+    FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
     return HttpResponse("delete already")
 
 def delete_friend(request):
@@ -72,7 +82,9 @@ def profile(request):
 
     user = User.objects.get(username = request.user)
     userProfile = UserProfile.objects.get(user = user)
-    another_user = UserProfile.objects.exclude(user = user)
+    
+    friends = userProfile.friends.values_list('id', flat=True)
+    another_user = UserProfile.objects.exclude(id__in = friends).exclude(user = user)
     invitation = FriendInvitation.objects.filter(Q(sender=userProfile) | Q(receiver=userProfile))
     
     context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
