@@ -3,7 +3,6 @@
 <style type="text/css">
 
 #content {
-    position: absolute;
     top: 90px;
     right: 0;
     bottom: 0;
@@ -12,7 +11,7 @@
 }
 #messages {
     overflow: auto;
-    max-height:80%;
+    height: 450px;
 }
 
 
@@ -20,35 +19,14 @@
 
 </style>
 <div style="">
-	<div class="list-group col-md-3 hideen-sm hidden-xs" style="margin-top:90px;">
-  		<a href="#" class="list-group-item active">
-	  		<span class="badge">14</span>
-			Cras justo odio
-	  	</a>
-	  	<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
-		</a>
+	<div class="list-group col-md-3 visible-md visible-lg" style="margin-top:90px;">
+		{% for i in userProfile.friends.all %}
   		<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
+	  		<span class="badge">14</span>
+			{{i.name}}
 	  	</a>
-	  	<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
-	  	</a>
-	  	<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
-	  	</a>
-	  	<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
-	  	</a>
-	  	<a href="#" class="list-group-item">
-		  	<span class="badge">14</span>
-			Cras justo odio
-	  	</a>
+
+	  	{% endfor %}
 	</div>
 
 	<div id="content" class="col-md-9" >
@@ -76,6 +54,24 @@
 			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
 			  </a>
 			  	<div class="media-body">				    <h4 class="media-heading">Me</h4>
+				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+				</div>
+			</div>
+			<div class="media thumbnail">
+			  <a class="pull-left" href="#">
+			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+			  </a>
+			  	<div class="media-body">
+				    <h4 class="media-heading">Me</h4>
+				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
+				</div>
+			</div>
+			<div class="media thumbnail">
+			  <a class="pull-left" href="#">
+			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
+			  </a>
+			  	<div class="media-body">
+				    <h4 class="media-heading">Me</h4>
 				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
 				</div>
 			</div>

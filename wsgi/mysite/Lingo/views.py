@@ -33,6 +33,14 @@ def index(request):
 
     return HttpResponse(template.render(context))
 
+def chat(request):
+    template = loader.get_template('linguo/chat.html')
+    user = User.objects.get(username = request.user)
+    userProfile = UserProfile.objects.get(user = user)
+
+    context = RequestContext(request,{'userProfile':userProfile})
+    return HttpResponse(template.render(context))
+
 def chat_list(request):
     template = loader.get_template('linguo/chat_list.html')
     context = RequestContext(request,{})
@@ -90,10 +98,7 @@ def profile(request):
     context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
     return HttpResponse(template.render(context))
 
-def chat(request):
-    template = loader.get_template('linguo/chat.html')
-    context = RequestContext(request,{})
-    return HttpResponse(template.render(context))
+
 
 
 def get_chat(request):
