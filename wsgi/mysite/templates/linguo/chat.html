@@ -9,9 +9,9 @@
     overflow-y: hidden;
     max-width: 900px;
 }
-#messages {
+#messageContent {
     overflow: auto;
-    height: 450px;
+    height: 350px;
 }
 
 
@@ -19,89 +19,37 @@
 
 </style>
 <div style="">
-	<div class="list-group col-md-3 visible-md visible-lg" style="margin-top:90px;">
+	<div id="chat_list"class="list-group col-md-3 visible-md visible-lg" style="margin-top:90px;">
 		{% for i in userProfile.friends.all %}
-  		<a href="#" class="list-group-item">
-	  		<span class="badge">14</span>
-			{{i.name}}
-	  	</a>
-
+			{% if i.name == talker %}
+		  		<a href="#" class="list-group-item active talker" name="{{i.name}}">
+			  		<span class="badge">14</span>
+					{{i.name}}
+			  	</a>
+			{% else %}
+    			<a href="#" class="list-group-item" name="{{i.name}}">
+			  		<span class="badge">14</span>
+					{{i.name}}
+			  	</a>
+			{% endif %}
 	  	{% endfor %}
 	</div>
 
 	<div id="content" class="col-md-9" >
-		<div id="messages" class="thumbnail">
+		<div id="messageContent" class="thumbnail">
+			{% for i in message %}
 		  	<div class="media thumbnail">
 			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.ericyu.ca/blog/wp-content/uploads/2013/04/Faces-2004.jpg" style="height:50px; width:50px;">
+			    <img class="media-object" src="" style="height:50px; width:50px;">
 			  </a>
 			  	<div class="media-body">
-				    <h4 class="media-heading">John Mcdonald</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin</p>
+				    <h4 class="media-heading">{{i.sender}}</h4>
+				    <p>{{i.text}}</p>
+				    <!-- {{i.datetime}} -->
 				</div>
 			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.ericyu.ca/blog/wp-content/uploads/2013/04/Faces-2004.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">John Mcdonald</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
-			<div class="media thumbnail">
-			  <a class="pull-left" href="#">
-			    <img class="media-object" src="http://www.infraxes.com/my-face.jpg" style="height:50px; width:50px;">
-			  </a>
-			  	<div class="media-body">
-				    <h4 class="media-heading">Me</h4>
-				    <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odioa congue felis in faucibus.</p>
-				</div>
-			</div>
+			{% endfor %}
+			
 		</div>	
 		<br>
 		<div id="textInput">
@@ -113,16 +61,83 @@
 </div>
 
 <script type="text/javascript">
-var objDiv = document.getElementById("messages");
+
+var objDiv = document.getElementById("messageContent");
 objDiv.scrollTop = objDiv.scrollHeight;
 
-$( "textarea" ).focus(function() {
-	var objDiv = document.getElementById("messages");
-	messages.scrollTop = objDiv.scrollHeight;
+
+
+(function poll(){
+$.ajax({
+    type: 'GET',
+    url: '/linguo/get_new_message',
+    success: function(data){       
+        createMessage(data);
+    },
+    dataType: "json",
+    complete: poll,
+    timeout: 30000
+})
+})();
+
+
+
+
+
+
+$("textarea").keyup(function (e) {
+	// have to show text before save text to database if not success show re-send button to user.
+	// at this postition, you can tell receiver that sender is typing. should do.
+	text = $(this).val();
+	if (e.keyCode == 13 && text.length > 0) {
+		
+	  	receiver = $('.talker').attr("name");
+	  	$(this).val("")
+	  
+	  	$.get('/linguo/send_message',{'receiver':receiver, 'text':text}, function(data){
+	  		createMessage(data);
+	  	})
+		
+	  
+
+	  
+	}
 });
-$( "input" ).focus(function() {
-  $( this ).next( "span" ).css( "display", "inline" ).fadeOut( 1000 );
+
+function createMessage(data){
+	for( var i = 0; i<data.length; i++){
+		$("<div class='media thumbnail'>"+
+			"<a class='pull-left'>"+
+				"<img class='media-object' src='' style='height:50px; width:50px;'>"+
+			"</a>"+
+			"<div class='media-body'>"+
+				"<h4 class='media-heading'>"+data[i].fields.sender+"</h4>"+
+				"<p>"+data[i].fields.text+"</p>"+
+			"</div>"+
+			"</div>").appendTo($("#messageContent"));
+		// var objDiv = document.getElementById("messageContent");s
+		// objDiv.scrollTop = objDiv.scrollHeight;
+	}
+	objDiv.scrollTop = objDiv.scrollHeight;
+	
+}
+
+//select linguist to talk to
+$(".list-group-item").click(function(){
+	$(".talker").attr("class", "list-group-item");
+	$(this).attr("class", "list-group-item active talker");
+	var talker = $(this).attr("name");
+
+	$.get('/linguo/get_message', {'receiver':talker}, function(data){
+		// add messages to the content
+		$("#messageContent").empty();
+		createMessage(data);
+		
+	})
+
 });
+
+
 </script>
 
 {% endblock %}

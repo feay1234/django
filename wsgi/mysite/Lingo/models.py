@@ -24,6 +24,8 @@ class UserProfile(models.Model):
     friends = models.ManyToManyField("self", related_name="friends")
     def __unicode__(self):
             return self.user.username
+    def natural_key(self):
+        return (self.name)
 
 class Message(models.Model):
 	sender = models.ForeignKey(UserProfile,related_name='senderM')

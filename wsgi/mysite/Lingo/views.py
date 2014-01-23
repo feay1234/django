@@ -1,7 +1,6 @@
 import os.path
 ROOT_PATH = os.path.dirname(__file__)
 from django.http import HttpResponse
-from django.utils import simplejson
 from django.core import serializers
 from django.template import RequestContext, loader
 from Lingo.models import *
@@ -38,8 +37,46 @@ def chat(request):
     user = User.objects.get(username = request.user)
     userProfile = UserProfile.objects.get(user = user)
 
-    context = RequestContext(request,{'userProfile':userProfile})
+    if request.method == 'GET' and 'talker' in request.GET:
+      talker = request.GET['talker']
+      talkerProfile = UserProfile.objects.get(name = talker)
+      message = Message.objects.filter(Q(sender=userProfile, receiver=talkerProfile) | Q(receiver=userProfile, sender=talkerProfile)).order_by('datetime')
+      message.update(notify = True) 
+      context = RequestContext(request,{'userProfile':userProfile,'message':message,'talker':talker})
+    else:
+      context = RequestContext(request,{'userProfile':userProfile})
     return HttpResponse(template.render(context))
+
+    
+def get_message(request):
+    sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    receiver = UserProfile.objects.get(name = request.GET['receiver'])
+    message = Message.objects.filter(Q(sender = sender, receiver = receiver) | Q(sender = receiver, receiver = sender)).order_by('datetime')
+    if len(message) == 0:
+        return HttpResponse("No")
+    else:
+        message.update(notify = True) 
+        data = serializers.serialize('json', message, use_natural_keys=True)
+        return HttpResponse(data, mimetype="application/json")    
+
+def get_new_message(request):
+    receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    patient = 0;
+    while True:
+        # check new message
+        message = Message.objects.filter(receiver = receiver, notify = False)
+        # patient <3 and sleep 5
+        if( len(message)==0 and patient<3):
+            time.sleep(5)
+            patient+=1
+        else:
+            break 
+    if len(message) > 0:
+        data = serializers.serialize('json', message,use_natural_keys=True)
+        message.update(notify = True) 
+        return HttpResponse(data, mimetype="application/json")
+    else:
+      return HttpResponse("")
 
 def chat_list(request):
     template = loader.get_template('linguo/chat_list.html')
@@ -81,8 +118,11 @@ def accept_friend(request):
 def send_message(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
     receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
-    Message(sender = sender, receiver = receiver, text = request.GET['text']).save()
-    return HttpResponse("yes")  
+    message = Message(sender = sender, receiver = receiver, text = request.GET['text'])
+    message.save()
+    messages = [message]
+    data = serializers.serialize('json', messages,use_natural_keys=True)
+    return HttpResponse(data, mimetype="application/json")
 
 @login_required
 def profile(request):

@@ -30,13 +30,11 @@
           </dd> 
         </dl>
         <br>
-        <p><a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a></p>
-        <p><a href="#" class="btn btn-default btn-block" role="button" >Add Linguist</a></p>
-
       </div>
     </div>
   </div>
   <div class="col-xs-6 col-sm-6 col-md-9" >
+    
     {% if invitation %}
 
     <div id="requestAlarm" class="alert alert-info"><strong>Friend Requests! </strong> accept the request and start chatting.</div>
@@ -119,7 +117,7 @@
                 </ul>
             </td>
             <td>
-              <a href="/linguo/chat" class="btn btn-primary btn-block" role="button">Chat</a>
+              <a  class="chatBtn btn btn-primary btn-block" role="button" name="{{i.name}}">Chat</a>
             </td>
           </tr>
       {% endfor %}
@@ -148,6 +146,17 @@ $( ".acceptBtn" ).click(function() {
   })
   
 });
+
+$(".chatBtn").click(function() {
+  var talker = $(this).attr("name");
+
+  var safe_talker = encodeURIComponent(talker);
+  var url = "/linguo/chat?talker=" + safe_talker;
+  window.location = url;
+  // $.get('/linguo/chat', {'talker': talker}, function(data){
+  //   alert("df")
+  // })
+})
 
 </script>
 {% endblock %}
