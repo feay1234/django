@@ -9,26 +9,24 @@
         <dl>
           <dt>Location</dt>
           <dd>Glasgow</dd>
-          <dt>Langauges <small><a href="">view all</a></small></dt>
+          <dt>Langauges </dt>
           <dd>
             <ul class="list-inline">
-              <li><span class="label label-primary">English</span></li>
-              <li><span class="label label-primary">German</span></li>
-              <li><span class="label label-primary">Chinese</span></li>
+              {% for i in userProfile.languages.all %}
+                <li><span class="label label-primary">{{i.name}}</span></li>
+              {% endfor %}
             </ul>
           </dd> 
-          <dt>Interests <small><a href="">view all</a></small></dt>
+          <dt>Interests </dt>
           <dd>
             <ul class="list-inline">
-              <li><span class="label label-success">Football</span></li>
-              <li><span class="label label-success">Rock Music</span></li>
-              <li><span class="label label-success">Movie</span></li>
-              <li><span class="label label-success">Reading</span></li>
-              <li><span class="label label-success">Party</span></li>
-              <li><span class="label label-success">Cooking</span></li>
+              {% for i in userProfile.interests.all %}
+                 <li><span class="label label-success">{{i.name}}</span></li>
+              {% endfor %}
             </ul>
           </dd> 
         </dl>
+        <button class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">Edit Profile</button>
         <br>
       </div>
     </div>
@@ -117,6 +115,7 @@
                 </ul>
             </td>
             <td>
+
               <a  class="chatBtn btn btn-primary btn-block" role="button" name="{{i.name}}">Chat</a>
             </td>
           </tr>
@@ -125,6 +124,86 @@
     </table>
       
   </div>
+  <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Edit Profile</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label for="inputEmail" class="col-lg-2 control-label">Email</label>
+              <div class="col-lg-10">
+                <input class="form-control" id="disabledInput" type="text" placeholder="test@gmail.com" disabled>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label for="inputEmail" class="col-lg-2 control-label">Languages</label>
+              <div class="col-lg-10">
+                  <div class="input-group">
+                    <input id="languageText" type="text" class="form-control" placeholder="Type language and click add">
+                    <span class="input-group-btn">
+                      <button id="languageAddBtn" class="btn btn-primary" type="button">Add</button>
+                    </span>
+                  </div>
+                  <br>
+                  <ul id="languageList" class="list-group">
+                    {% for i in userProfile.languages.all %}
+                      <li class="list-group-item languages">
+                        <ul class="list-inline">
+                          <li class="language">{{i.name}}</li>
+                          <li class='pull-right'><button type="button" class="languageRemoveBtn btn btn-danger btn-xs">Delete</button></li>
+                        </ul>
+                      </li>
+                    {% endfor %}
+                  </ul>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="form-group">
+              <label for="inputEmail" class="col-lg-2 control-label">Interests</label>
+              <div class="col-lg-10">
+                  <div class="input-group">
+                    <input id="interestText" type="text" class="form-control" placeholder="Type your interest and click add">
+                    <span class="input-group-btn">
+                      <button id="interestAddBtn" class="btn btn-primary" type="button">Add</button>
+                    </span>
+                  </div>
+                  <br>
+                  <ul id="interestList" class="list-group">
+                    {% for i in userProfile.interests.all %}
+                      <li class="list-group-item interests">
+                        <ul class="list-inline">
+                          <li class='interest'>{{i.name}}</li>
+                          <li class='pull-right'><button type="button" class="interestRemoveBtn btn btn-danger btn-xs">Delete</button></li>
+                        </ul>
+                      </li>
+
+                    {% endfor %}
+                  </ul>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+      </div>  
+        
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </div>
 <script type="text/javascript">
 
@@ -133,7 +212,6 @@ $( ".acceptBtn" ).click(function() {
   var sender = $t.attr('name');
     
   $.get('/linguo/accept_request',{'sender':sender}, function(data){
-      alert(data);
       $t.parent().parent().remove();
       var rowCount = $('#requestTable tr').length;
       if(rowCount == 1){
@@ -147,6 +225,69 @@ $( ".acceptBtn" ).click(function() {
   
 });
 
+$("#languageAddBtn").click(function(){
+  var name = $("#languageText").val();
+  var mode = "add_language";
+  $("#languageText").val('');
+  $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+      $("#languageList").append("<li class='list-group-item languages'>"+
+                        "<ul class='list-inline'>"+
+                          "<li class='language'>"+name+"</li>"+
+                          "<li class='pull-right'><button type='button' class='languageRemoveBtn2 btn btn-danger btn-xs'>Delete</button></li>"+
+                       " </ul>"+
+                      "</li>")
+      $(".languageRemoveBtn2").click(function(){
+        var name = $(this).parent().siblings(".language").text();
+        var mode = "remove_language"
+        var $t = $(this);
+        $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+            $t.parent().parent().parent().remove();
+        })
+      })
+  })
+});
+$("#interestAddBtn").click(function(){
+  var name = $("#interestText").val();
+  var mode = "add_interest";
+  $("#interestText").val('');
+  $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+      $("#interestList").append("<li class='list-group-item interests'>"+
+                        "<ul class='list-inline'>"+
+                          "<li class='interest'>"+name+"</li>"+
+                          "<li class='pull-right'><button type='button' class='interestRemoveBtn2 btn btn-danger btn-xs'>Delete</button></li>"+
+                       " </ul>"+
+                      "</li>")
+      $(".interestRemoveBtn2").click(function(){
+        var name = $(this).parent().siblings(".interest").text();
+        var mode = "remove_interest"
+        var $t = $(this);
+        $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+            $t.parent().parent().parent().remove();
+        })
+      })
+
+  })
+});                        
+
+$(".languageRemoveBtn").click(function(){
+  var name = $(this).parent().siblings(".language").text();
+  var mode = "remove_language"
+  var $t = $(this);
+  $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+      $t.parent().parent().parent().remove();
+  })
+})
+
+$(".interestRemoveBtn").click(function(){
+  var name = $(this).parent().siblings(".interest").text();
+  var mode = "remove_interest"
+  var $t = $(this);
+  $.get('/linguo/add_profile',{'name':name, 'mode':mode}, function(data){
+      $t.parent().parent().parent().remove();
+  })
+})
+
+
 $(".chatBtn").click(function() {
   var talker = $(this).attr("name");
 
@@ -156,6 +297,10 @@ $(".chatBtn").click(function() {
   // $.get('/linguo/chat', {'talker': talker}, function(data){
   //   alert("df")
   // })
+})
+$('#myModal').on('hide.bs.modal', function (e) {
+  var url = "/linguo/";
+  window.location = url;
 })
 
 </script>

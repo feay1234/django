@@ -47,6 +47,36 @@ def chat(request):
       context = RequestContext(request,{'userProfile':userProfile})
     return HttpResponse(template.render(context))
 
+def add_profile(request):
+    user = User.objects.get(username = request.user)
+    userProfile = UserProfile.objects.get(user = user)
+    mode = request.GET['mode']
+    if mode == "add_language":
+      try:
+          language = Language.objects.get(name = request.GET['name'])
+      except (Language.DoesNotExist):
+          language = Language(name = request.GET['name'])
+          language.save()
+      userProfile.languages.add(language)
+
+    elif mode == "add_interest":
+      try:
+          interest = Interest.objects.get(name = request.GET['name'])
+      except (Interest.DoesNotExist):
+          interest = Interest(name = request.GET['name'])
+          interest.save()
+      userProfile.interests.add(interest)
+
+    elif mode == "remove_language":
+      language = Language.objects.get(name = request.GET['name'])
+      userProfile.languages.remove(language)
+
+    elif mode == "remove_interest":
+      interest = Interest.objects.get(name = request.GET['name'])
+      userProfile.interests.remove(interest)
+    
+
+    return HttpResponse("yes")
     
 def get_message(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
@@ -107,13 +137,7 @@ def delete_friend(request):
 
     return HttpResponse("yes")
 
-def accept_friend(request):
-    receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
-    sender = UserProfile.objects.get(user = User.objects.get(username = request.GET['sender']))     
-    friendInvitation = FriendInvitation.objects.filter(sender = sender, receiver = receiver)
-    friendInvitation.update(approve = True)
-    
-    return HttpResponse("yes")
+
 
 def send_message(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
@@ -138,6 +162,19 @@ def profile(request):
     context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
     return HttpResponse(template.render(context))
 
+@login_required
+def edit_profile(request):
+    template = loader.get_template('linguo/edit_profile.html')
+
+    user = User.objects.get(username = request.user)
+    userProfile = UserProfile.objects.get(user = user)
+    
+    friends = userProfile.friends.values_list('id', flat=True)
+    another_user = UserProfile.objects.exclude(id__in = friends).exclude(user = user)
+    invitation = FriendInvitation.objects.filter(Q(sender=userProfile) | Q(receiver=userProfile))
+    
+    context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
+    return HttpResponse(template.render(context))
 
 
 

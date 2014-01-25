@@ -11,6 +11,19 @@ GENDER = (
     ('F', 'Female'),
 
 )
+class Language(models.Model):
+    name = models.CharField(max_length=64, unique=True)
+    def __unicode__(self):
+            return self.name
+    def natural_key(self):
+        return (self.name)
+class Interest(models.Model):
+    name = models.CharField(max_length=128, unique=True)
+    def __unicode__(self):
+            return self.name
+    def natural_key(self):
+        return (self.name)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField(max_length=32)
@@ -22,6 +35,9 @@ class UserProfile(models.Model):
     latitude = models.DecimalField(max_digits=8, decimal_places=3, null=True, blank=True)
     datetime = models.DateTimeField(default=datetime.now, editable=False)
     friends = models.ManyToManyField("self", related_name="friends")
+    languages = models.ManyToManyField(Language)
+    interests = models.ManyToManyField(Interest)
+
     def __unicode__(self):
             return self.user.username
     def natural_key(self):
@@ -37,13 +53,7 @@ class Message(models.Model):
 	def __unicode__(self):
             return self.sender.user.username
 
-class Language(models.Model):
-	user = models.ForeignKey(UserProfile,related_name='userL')
-	language = models.CharField(max_length=64)
 
-class Favorite(models.Model):
-	user = models.ForeignKey(UserProfile,related_name='userF')
-	favorite = models.CharField(max_length=128)
 
 class FriendInvitation(models.Model):
     sender = models.ForeignKey(UserProfile,related_name='senderFI')
