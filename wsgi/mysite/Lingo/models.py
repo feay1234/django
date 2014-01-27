@@ -26,6 +26,7 @@ class Interest(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
+    # name must be unique
     name = models.CharField(max_length=32)
     photo = models.CharField(max_length=32)
     gender = models.CharField(max_length=1, choices=GENDER)

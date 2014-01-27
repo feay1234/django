@@ -55,23 +55,20 @@
             </td>
             <td>
                 <ul class="list-inline">
-                  <li><span class="label label-primary">English</span></li>
-                  <li><span class="label label-primary">German</span></li>
-                  <li><span class="label label-primary">Chinese</span></li>
+                  {% for j in i.sender.languages.all %}
+                  <li><span class="label label-primary">{{j.name}}</span></li>
+                  {% endfor %}
                 </ul>
             </td> 
             <td>
                 <ul class="list-inline">
-                  <li><span class="label label-success">Football</span></li>
-                  <li><span class="label label-success">Rock Music</span></li>
-                  <li><span class="label label-success">Movie</span></li>
-                  <li><span class="label label-success">Reading</span></li>
-                  <li><span class="label label-success">Party</span></li>
-                  <li><span class="label label-success">Cooking</span></li>
+                  {% for j in i.sender.interests.all %}
+                  <li><span class="label label-success">{{j.name}}</span></li>
+                  {% endfor %}
                 </ul>
             </td>
             <td>
-              <a href="#" class="acceptBtn btn btn-primary btn-block" name="{{i.sender.name}}">Accept</a>
+              <a href="#" class="acceptBtn btn btn-primary btn-block" name="{{i.sender}}">Accept</a>
             </td>
           </tr>
       {% endfor %}
@@ -99,19 +96,16 @@
             </td>
             <td>
                 <ul class="list-inline">
-                  <li><span class="label label-primary">English</span></li>
-                  <li><span class="label label-primary">German</span></li>
-                  <li><span class="label label-primary">Chinese</span></li>
+                  {% for j in i.languages.all %}
+                  <li><span class="label label-primary">{{j.name}}</span></li>
+                  {% endfor %}
                 </ul>
             </td> 
             <td>
                 <ul class="list-inline">
-                  <li><span class="label label-success">Football</span></li>
-                  <li><span class="label label-success">Rock Music</span></li>
-                  <li><span class="label label-success">Movie</span></li>
-                  <li><span class="label label-success">Reading</span></li>
-                  <li><span class="label label-success">Party</span></li>
-                  <li><span class="label label-success">Cooking</span></li>
+                  {% for j in i.interests.all %}
+                  <li><span class="label label-success">{{j.name}}</span></li>
+                  {% endfor %}
                 </ul>
             </td>
             <td>
@@ -220,7 +214,8 @@ $( ".acceptBtn" ).click(function() {
         $('#requestAlarm').remove();
       }
       // automatically add new linguist to friend list
-      
+      var url = "/linguo/";
+      window.location = url;
   })
   
 });
@@ -294,9 +289,7 @@ $(".chatBtn").click(function() {
   var safe_talker = encodeURIComponent(talker);
   var url = "/linguo/chat?talker=" + safe_talker;
   window.location = url;
-  // $.get('/linguo/chat', {'talker': talker}, function(data){
-  //   alert("df")
-  // })
+
 })
 $('#myModal').on('hide.bs.modal', function (e) {
   var url = "/linguo/";

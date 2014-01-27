@@ -1,76 +1,140 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+{% extends 'linguo/base.html' %}
+{% load custom_template %}
+{% block content %}
+<div class="row" style="padding-top:90px;">
+  <div class="col-xs-6 col-sm-6 col-md-3">
+  <legend>Filter by languages</legend>
+    <ul id="languageList" class="list-group">
+      {% for i in userProfile.languages.all %}
+        <li class="list-group-item languages">
+          <ul class="list-inline">
+            <li><input class="language" type="checkbox" checked name={{i.name}}>{{i.name}}</li>
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+    <legend>Filter by interests</legend>
+    <ul id="interestList" class="list-group">
+      {% for i in userProfile.interests.all %}
+        <li class="list-group-item interests">
+          <ul class="list-inline">
+            <li><input class='interest' type="checkbox" checked>{{i.name}}</li>
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+    <button id="searchBtn" class="btn btn-block btn-primary">Search</button>
+  </div>
+  <div class="col-xs-6 col-sm-6 col-md-9" >
+    <h3>Search Result</h3>
+    <table class="table table-hover">
+      <tr>
+      <th>Picture</th>
+      <th>Name</th>
+      <th>Languages</th>
+      <th>Interests</th>
+      <th>Action</th>
+      </tr>
+      {% for i in another_user %}
+          
+          <tr>
+            <td>
+              <img class="media-object" src="{{ STATIC_URL}}women.png" style="height:40px; width:40px;">
+            </td>
+            <td>
+              {{i.name}}
+            </td>
+            <td>
+                <ul class="list-inline">
+                  {% for j in i.languages.all %}
+                  <li><span class="label label-primary">{{j.name}}</span></li>
+                  {% endfor %}
+                </ul>
+            </td> 
+            <td>
+                <ul class="list-inline">
+                  {% for j in i.interests.all %}
+                  <li><span class="label label-success">{{j.name}}</span></li>
+                  {% endfor %}
+                </ul>
+            </td>
+            <td>
+              {% if i|check_request:invitation %}
+                <a class="addBtn btn btn-danger btn-block" name="{{i}}">Request</a>
+              {% else %}
+                <a class="addBtn btn btn-primary btn-block" name="{{i}}">Add</a>
+              {% endif %}
+            </td>
+          </tr>
+      {% endfor %}
+      
+    </table>   
+  </div>
+</div>
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <!-- Bootstrap core CSS -->
+<script type="text/javascript">
+
+$( ".addBtn" ).click(function() {
+  var $t = $(this);
+  var receiver = $t.attr('name');
+  if( $t.text() == "Add"){
     
+    $.get('/linguo/add_friend',{'receiver':receiver}, function(data){
 
-    <!-- Custom styles for this template -->
+      $t.attr('class', 'addBtn btn btn-danger btn-block');
+      $t.text('Request');
+    })
+  }
+  else{
+    $.get('/linguo/delete_friendInvitation',{'receiver':receiver}, function(data){
+      $t.attr('class', 'addBtn btn btn-primary btn-block');
+      $t.text('Add');
+    })
+    
+  }
+});
 
-    <!-- Just for debugging purposes. Don't actually copy this line! -->
-    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+$("#searchBtn").click(function(){
+    var language = [];
+    var interest = [];
 
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
+    $(".language").each(function(){
+      
+      if ($(this).is(":checked") == false) {
+        language.push($(this).attr("name"))
+      };
+    })
 
-  <body>
-    <div class="container" style='padding-top:5px;'>
-        <div class="jumbotron">
-          <h1>Would like to talk others ?</h1>
-          <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-        </div>
-        <form role="form" action='search_result.html'>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Langauges</label>
-            <select class="form-control">
-              <option>English</option>
-              <option>Thai</option>
-              <option>German</option>
-              <option>French</option>
-              <option>Korean</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Location</label>
-            <input  class="form-control" id="exampleInputPassword1" placeholder="Location">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Interests</label>
-            <select class="form-control">
-              <option>Football</option>
-              <option>Drink</option>
-              <option>Party</option>
-              <option>Books</option>
-              <option>Movies</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Radious</label>
-            <input  class="form-control" id="exampleInputPassword1" placeholder="Radious">
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Search</button>
-          <button type="submit" class="btn btn-success btn-block">Randomize</button>
-        </form>
-    </div> <!-- /container -->
+    $(".interest").each(function(){
+      if ($(this).is(":checked") == false) {
+        interest.push($(this).attr("name"))
+      }
+      
+    })
+
+    // alert(language);
+    var url = "/linguo/search?language="+language+"&interest="+interest;
+    window.location = url;
+});
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/holder/holder.js"></script>
-  </body>
-</html>
+//select linguist to talk to
+$(".list-group-item").click(function(){
+  $(".talker").attr("class", "list-group-item");
+  $(this).attr("class", "list-group-item active talker");
+  var talker = $(this).attr("name");
+
+  $.get('/linguo/get_message', {'receiver':talker}, function(data){
+    // add messages to the content
+    $("#messageContent").empty();
+    createMessage(data);
+    
+  })
+
+});
+
+//change NarBar
+$(".selectedBar").attr("class", "navBar");
+$(".searchBar").attr("class", "selectedBar active");
+</script>
+{% endblock %}

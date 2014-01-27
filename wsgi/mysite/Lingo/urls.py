@@ -6,7 +6,7 @@ from Lingo import views
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^register/$', views.register, name='register'),
-    url(r'^profile/$', views.profile, name='profile'),
+    url(r'^search/$', views.search, name='search'),
     url(r'^add_profile/$', views.add_profile, name='add_profile'),
     url(r'^edit_profile/$', views.edit_profile, name='edit_profile'),
     url(r'^add_friend/$', views.add_friend, name='add_friend'),

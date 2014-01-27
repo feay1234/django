@@ -149,17 +149,29 @@ def send_message(request):
     return HttpResponse(data, mimetype="application/json")
 
 @login_required
-def profile(request):
-    template = loader.get_template('linguo/friend.html')
+def search(request):
+    template = loader.get_template('linguo/search.html')
 
     user = User.objects.get(username = request.user)
     userProfile = UserProfile.objects.get(user = user)
-    
     friends = userProfile.friends.values_list('id', flat=True)
-    another_user = UserProfile.objects.exclude(id__in = friends).exclude(user = user)
+    filter_language = []
+    filter_interest = []
+
+    if "language" in request.GET:
+      filter_language = request.GET["language"].split(",")
+
+    if "interest" in request.GET:
+      filter_interest = request.GET["interest"].split(",")
+
+    languages = userProfile.languages.exclude(name__in = filter_language).values_list('id', flat=True)  
+    interests = userProfile.interests.exclude(name__in = filter_interest).values_list('id', flat=True)
+
+    another_user = UserProfile.objects.exclude(id__in = friends).exclude(user = user).filter(Q(languages__in = languages) | Q(interests__in = interests)).distinct()
+
     invitation = FriendInvitation.objects.filter(Q(sender=userProfile) | Q(receiver=userProfile))
     
-    context = RequestContext(request,{'another_user':another_user, 'invitation':invitation})
+    context = RequestContext(request,{'userProfile':userProfile,'another_user':another_user, 'invitation':invitation})
     return HttpResponse(template.render(context))
 
 @login_required
