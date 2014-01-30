@@ -42,7 +42,9 @@ def chat(request):
       talkerProfile = UserProfile.objects.get(name = talker)
       message = Message.objects.filter(Q(sender=userProfile, receiver=talkerProfile) | Q(receiver=userProfile, sender=talkerProfile)).order_by('datetime')
       message.update(notify = True) 
-      context = RequestContext(request,{'userProfile':userProfile,'message':message,'talker':talker})
+      message_notification = Message.objects.filter(receiver=userProfile, read=False).values('sender').annotate(Count('sender'))
+      # message_notification.update(notify = True)
+      context = RequestContext(request,{'userProfile':userProfile,'message':message,'talker':talker, 'message_notification':message_notification})
     else:
       context = RequestContext(request,{'userProfile':userProfile})
     return HttpResponse(template.render(context))
@@ -85,18 +87,19 @@ def get_message(request):
     if len(message) == 0:
         return HttpResponse("No")
     else:
-        message.update(notify = True) 
+        message.update(notify = True, read = True) 
         data = serializers.serialize('json', message, use_natural_keys=True)
         return HttpResponse(data, mimetype="application/json")    
 
 def get_new_message(request):
     receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
+    sender = UserProfile.objects.get(name = request.GET['talker'])
     patient = 0;
     while True:
         # check new message
-        message = Message.objects.filter(receiver = receiver, notify = False)
-        # patient <3 and sleep 5
-        if( len(message)==0 and patient<3):
+        message = Message.objects.filter(receiver = receiver, sender = sender, notify = False)
+        message_notification = Message.objects.filter(receiver=receiver, notify = False).values('sender').annotate(Count('sender'))
+        if (len(message)==0 or len(message_notification) == 0) and patient<3:
             time.sleep(5)
             patient+=1
         else:
@@ -105,8 +108,14 @@ def get_new_message(request):
         data = serializers.serialize('json', message,use_natural_keys=True)
         message.update(notify = True) 
         return HttpResponse(data, mimetype="application/json")
+    elif len(message_notification) > 0:
+        result = []
+        for i in message_notification:
+          result.append(i)
+        message_notification.update(notify = True)
+        return HttpResponse(json.dumps(result), content_type="application/json")
     else:
-      return HttpResponse("")
+        return HttpResponse("")
 
 def chat_list(request):
     template = loader.get_template('linguo/chat_list.html')
@@ -115,12 +124,12 @@ def chat_list(request):
 
 def add_friend(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
-    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    receiver = UserProfile.objects.get(name = request.GET['receiver'])
     FriendInvitation(sender = sender, receiver = receiver).save()
     return HttpResponse("yes")
 
 def accept_request(request):
-    sender = UserProfile.objects.get(user = User.objects.get(username = request.GET['sender']))
+    sender = UserProfile.objects.get(name = request.GET['sender'])
     receiver = UserProfile.objects.get(user = User.objects.get(username = request.user))
     receiver.friends.add(sender)
     FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
@@ -128,7 +137,7 @@ def accept_request(request):
 
 def delete_friendInvitation(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
-    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    receiver = UserProfile.objects.get(name = request.GET['receiver'])
     FriendInvitation.objects.filter(sender = sender, receiver = receiver).delete()
     return HttpResponse("delete already")
 
@@ -141,7 +150,7 @@ def delete_friend(request):
 
 def send_message(request):
     sender = UserProfile.objects.get(user = User.objects.get(username = request.user))
-    receiver = UserProfile.objects.get(user = User.objects.get(username = request.GET['receiver']))
+    receiver = UserProfile.objects.get(name = request.GET['receiver'])
     message = Message(sender = sender, receiver = receiver, text = request.GET['text'])
     message.save()
     messages = [message]

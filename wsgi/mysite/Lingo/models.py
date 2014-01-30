@@ -40,7 +40,7 @@ class UserProfile(models.Model):
     interests = models.ManyToManyField(Interest)
 
     def __unicode__(self):
-            return self.user.username
+            return self.name
     def natural_key(self):
         return (self.name)
 
@@ -52,7 +52,7 @@ class Message(models.Model):
 	read = models.BooleanField(default=False)
 	notify = models.BooleanField(default=False)
 	def __unicode__(self):
-            return self.sender.user.username
+            return self.sender
 
 
 

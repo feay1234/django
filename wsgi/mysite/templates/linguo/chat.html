@@ -18,17 +18,27 @@
 
 
 </style>
+
 <div style="">
+
 	<div id="chat_list"class="list-group col-md-3 visible-md visible-lg" style="margin-top:90px;">
 		{% for i in userProfile.friends.all %}
 			{% if i.name == talker %}
-		  		<a href="#" class="list-group-item active talker" name="{{i}}">
-			  		<span class="badge">14</span>
+		  		<a href="#" class="list-group-item active talker" name="{{i.name}}">
+			  		<span class="badge"></span>
 					{{i.name}}
 			  	</a>
 			{% else %}
     			<a href="#" class="list-group-item" name="{{i.name}}">
-			  		<span class="badge">14</span>
+    				{% if message_notification %}
+			  		
+			  			{% for j in message_notification %}
+			  				{% if j.sender == i.id %}
+			  					<span id="badge-{{i.id}}"class="badge">{{j.sender__count}}</span>
+			  				{% endif %}
+			  			{% endfor %}
+			  		
+			  		{% endif %}
 					{{i.name}}
 			  	</a>
 			{% endif %}
@@ -66,14 +76,27 @@ var objDiv = document.getElementById("messageContent");
 objDiv.scrollTop = objDiv.scrollHeight;
 
 
-
 (function poll(){
+var talker = $(".talker").attr("name");
 $.ajax({
     type: 'GET',
     url: '/linguo/get_new_message',
-    success: function(data){       
-        createMessage(data);
+    data: {'talker':talker},
+    success: function(data){     
+    	// alert(data[0].sender__count)
+    	// alert(data)
+    	if( data[0].hasOwnProperty('sender__count') ){
+    		notifyMessage(data);
+    	}
+    	else{
+    		// alert("df")
+    		createMessage(data);
+    	}
+        
     },
+    error: function(){
+    	// alert('failure');
+  	},
     dataType: "json",
     complete: poll,
     timeout: 30000
@@ -81,9 +104,30 @@ $.ajax({
 })();
 
 
+$(".list-group-item").click(function(){
+	if($(this).attr("class") != "list-group-item active talker"){
+		var $t = $(this);
+		var receiver = $t.attr("name");
+		$(".talker").attr("class", "list-group-item")
+		$t.attr("class", "list-group-item active talker")
+		$t.children().text("");
+		$.get('/linguo/get_message', {'receiver': receiver}, function(data){
+			clearChatContent();
+			createMessage(data);
+		})
+	}
+})
 
+function clearChatContent(){
+	$("#messageContent").empty();
+}
 
-
+function notifyMessage(data){
+	for( var i = 0; i<data.length; i++){
+		var old_count = $('#badge-'+data[i].sender).text();
+		$('#badge-'+data[i].sender).text(data[i].sender__count+parseInt(old_count));
+	}
+}
 
 $("textarea").keyup(function (e) {
 	// have to show text before save text to database if not success show re-send button to user.
@@ -93,7 +137,6 @@ $("textarea").keyup(function (e) {
 		
 	  	receiver = $('.talker').attr("name");
 	  	$(this).val("")
-	  
 	  	$.get('/linguo/send_message',{'receiver':receiver, 'text':text}, function(data){
 	  		createMessage(data);
 	  	})
